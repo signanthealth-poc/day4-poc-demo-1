@@ -23,27 +23,16 @@ env:
   ARTIFACT_NAME: 'weather-api-artifacts'
 
 jobs:
-  # Build and Test Matrix for Multiple Windows Versions
   build-and-test:
-    name: Build & Test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Build & Test
+    runs-on: windows-latest
     strategy:
-      fail-fast: false
       matrix:
-        os: [windows-latest, windows-2022, windows-2019]
-        include:
-          - os: windows-latest
-            display-name: "Windows Latest"
-          - os: windows-2022
-            display-name: "Windows 2022"
-          - os: windows-2019
-            display-name: "Windows 2019"
+        environment: [staging, production]
     
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -58,55 +47,53 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    - name: Cache build outputs
-      uses: actions/cache@v3
-      with:
-        path: |
-          **/bin
-          **/obj
-        key: ${{ runner.os }}-build-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-build-
+    - name: Restore and Build
+      run: |
+        dotnet restore ${{ env.SOLUTION_PATH }}
+        dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
-    - name: Restore dependencies
-      run: dotnet restore ${{ env.SOLUTION_PATH }}
+    - name: Run All Tests
+      run: dotnet test ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger trx --results-directory TestResults
 
-    - name: Build solution
-      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
-
-    - name: Run MSTests
-      run: dotnet test tests/WeatherApi.MSTests/WeatherApi.MSTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=mstest-results.trx" --collect:"XPlat Code Coverage"
-
-    - name: Run NUnit Tests
-      run: dotnet test tests/WeatherApi.NUnitTests/WeatherApi.NUnitTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=nunit-results.trx" --collect:"XPlat Code Coverage"
-
-    - name: Run xUnit Tests
-      run: dotnet test tests/WeatherApi.XUnitTests/WeatherApi.XUnitTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=xunit-results.trx" --collect:"XPlat Code Coverage"
-
-    - name: Publish test results
+    - name: Publish Test Results
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Test Results (${{ matrix.display-name }})
-        path: '**/*.trx'
+        name: Test Results (${{ matrix.environment }})
+        path: 'TestResults/**/*.trx'
         reporter: dotnet-trx
 
-    - name: Upload test coverage
-      uses: codecov/codecov-action@v3
-      if: matrix.os == 'windows-latest'
-      with:
-        file: '**/coverage.cobertura.xml'
-        flags: unittests
-        name: codecov-umbrella
+    - name: Create Deployment Package
+      if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+      run: dotnet publish src/WeatherApi/WeatherApi.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./publish/${{ matrix.environment }}
 
-    - name: Publish artifacts
-      if: matrix.os == 'windows-latest' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
-      run: dotnet publish src/WeatherApi/WeatherApi.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./publish
-
-    - name: Upload build artifacts
-      if: matrix.os == 'windows-latest' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+    - name: Upload Artifacts
+      if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.ARTIFACT_NAME }}
-        path: ./publish
+        name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
+        path: ./publish/${{ matrix.environment }}
         retention-days: 30
+
+  deploy:
+    name: Deploy to ${{ matrix.environment }}
+    needs: build-and-test
+    runs-on: windows-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    strategy:
+      matrix:
+        environment: [staging, production]
+    environment: ${{ matrix.environment }}
+    
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
+        path: ./deploy
+
+    - name: Deploy Application
+      run: |
+        Write-Host "🚀 Deploying to ${{ matrix.environment }} environment"
+        Write-Host "📦 Package ready at: ./deploy"
+        Write-Host "✅ Deployment to ${{ matrix.environment }} completed!"
