@@ -1,5 +1,11 @@
 name: Windows CI/CD Pipeline
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+  actions: read
+
 on:
   push:
     branches: [ master, main, develop ]
@@ -56,12 +62,13 @@ jobs:
       run: dotnet test WeatherApiDemo.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx
 
     - name: Publish test results
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v1.9.1
       if: success() || failure()
       with:
         name: Test Results
-        path: './TestResults/*.trx'
+        path: './TestResults/**/*.trx'
         reporter: dotnet-trx
+        fail-on-error: false
 
     - name: Generate version
       id: version
