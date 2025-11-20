@@ -2,13 +2,13 @@ name: Windows CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop, 'feature/**' ]
+    branches: [ master, main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ master, main ]
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment environment'
+        description: 'Target environment for deployment'
         required: true
         default: 'staging'
         type: choice
@@ -18,82 +18,127 @@ on:
 
 env:
   DOTNET_VERSION: '8.0.x'
-  SOLUTION_PATH: './WeatherApiDemo.sln'
   BUILD_CONFIGURATION: 'Release'
-  ARTIFACT_NAME: 'weather-api-artifacts'
 
 jobs:
-  build-and-test:
-    name: Build & Test
+  build:
+    name: Build and Test
     runs-on: windows-latest
-    strategy:
-      matrix:
-        environment: [staging, production]
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Cache NuGet packages
-      uses: actions/cache@v3
+    - name: Cache dependencies
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    - name: Restore and Build
-      run: |
-        dotnet restore ${{ env.SOLUTION_PATH }}
-        dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+    - name: Restore dependencies
+      run: dotnet restore WeatherApiDemo.sln
 
-    - name: Run All Tests
-      run: dotnet test ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger trx --results-directory TestResults
+    - name: Build solution
+      run: dotnet build WeatherApiDemo.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
 
-    - name: Publish Test Results
+    - name: Run tests
+      run: dotnet test WeatherApiDemo.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./TestResults --logger trx
+
+    - name: Publish test results
       uses: dorny/test-reporter@v1
       if: success() || failure()
       with:
-        name: Test Results (${{ matrix.environment }})
-        path: 'TestResults/**/*.trx'
+        name: Test Results
+        path: './TestResults/*.trx'
         reporter: dotnet-trx
 
-    - name: Create Deployment Package
-      if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-      run: dotnet publish src/WeatherApi/WeatherApi.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./publish/${{ matrix.environment }}
+    - name: Generate version
+      id: version
+      run: |
+        $version = "1.0.${{ github.run_number }}"
+        echo "version=$version" >> $env:GITHUB_OUTPUT
+        echo "Generated version: $version"
 
-    - name: Upload Artifacts
-      if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    - name: Publish application
+      run: dotnet publish src/WeatherApi/WeatherApi.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./publish
+
+    - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
-        path: ./publish/${{ matrix.environment }}
+        name: app-${{ steps.version.outputs.version }}
+        path: ./publish/
         retention-days: 30
 
-  deploy:
-    name: Deploy to ${{ matrix.environment }}
-    needs: build-and-test
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-    strategy:
-      matrix:
-        environment: [staging, production]
-    environment: ${{ matrix.environment }}
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    environment: staging
     
     steps:
-    - name: Download Artifacts
+    - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
+        name: app-${{ needs.build.outputs.version }}
         path: ./deploy
 
-    - name: Deploy Application
+    - name: Deploy to Staging
       run: |
-        Write-Host "🚀 Deploying to ${{ matrix.environment }} environment"
-        Write-Host "📦 Package ready at: ./deploy"
-        Write-Host "✅ Deployment to ${{ matrix.environment }} completed!"
+        Write-Host "🚀 Deploying version ${{ needs.build.outputs.version }} to Staging"
+        Write-Host "📁 Application files:"
+        Get-ChildItem -Path ./deploy -Recurse | Select-Object Name, Length | Format-Table
+        Write-Host "✅ Staging deployment completed successfully!"
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [build, deploy-staging]
+    runs-on: windows-latest
+    if: (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') && github.event_name != 'pull_request'
+    environment: production
+    
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-${{ needs.build.outputs.version }}
+        path: ./deploy
+
+    - name: Deploy to Production
+      run: |
+        Write-Host "🚀 Deploying version ${{ needs.build.outputs.version }} to Production"
+        Write-Host "📁 Application files:"
+        Get-ChildItem -Path ./deploy -Recurse | Select-Object Name, Length | Format-Table
+        Write-Host "✅ Production deployment completed successfully!"
+
+  deploy-manual:
+    name: Manual Deploy to ${{ github.event.inputs.environment }}
+    needs: build
+    runs-on: windows-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.environment != ''
+    environment: ${{ github.event.inputs.environment }}
+    
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-${{ needs.build.outputs.version }}
+        path: ./deploy
+
+    - name: Deploy to ${{ github.event.inputs.environment }}
+      run: |
+        Write-Host "🚀 Manual deployment of version ${{ needs.build.outputs.version }} to ${{ github.event.inputs.environment }}"
+        Write-Host "📁 Application files:"
+        Get-ChildItem -Path ./deploy -Recurse | Select-Object Name, Length | Format-Table
+        Write-Host "✅ Manual deployment to ${{ github.event.inputs.environment }} completed successfully!"
