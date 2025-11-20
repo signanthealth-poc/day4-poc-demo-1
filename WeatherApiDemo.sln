@@ -1,0 +1,60 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi", "src\WeatherApi\WeatherApi.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi.Core", "src\WeatherApi.Core\WeatherApi.Core.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi.Data", "src\WeatherApi.Data\WeatherApi.Data.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi.MSTests", "tests\WeatherApi.MSTests\WeatherApi.MSTests.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi.NUnitTests", "tests\WeatherApi.NUnitTests\WeatherApi.NUnitTests.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApi.XUnitTests", "tests\WeatherApi.XUnitTests\WeatherApi.XUnitTests.csproj", "{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B2} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B0}
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B3} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B0}
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B4} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B0}
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B5} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B1}
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B6} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B1}
+		{8BB2717D-0240-44C4-BF83-78D5F5A8C9B7} = {8BB2717D-0240-44C4-BF83-78D5F5A8C9B1}
+	EndGlobalSection
+EndGlobal

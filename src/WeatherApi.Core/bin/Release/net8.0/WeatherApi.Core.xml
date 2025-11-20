@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WeatherApi.Core</name>
+    </assembly>
+    <members>
+        <member name="T:WeatherApi.Core.Models.WeatherForecast">
+            <summary>
+            Represents a weather forecast for a specific date
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.Date">
+            <summary>
+            Gets or sets the date of the forecast
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.TemperatureC">
+            <summary>
+            Gets or sets the temperature in Celsius
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.TemperatureF">
+            <summary>
+            Gets the temperature in Fahrenheit
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.Summary">
+            <summary>
+            Gets or sets the weather summary
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.City">
+            <summary>
+            Gets or sets the city name
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.Humidity">
+            <summary>
+            Gets or sets the humidity percentage
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherForecast.WindSpeed">
+            <summary>
+            Gets or sets the wind speed in km/h
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Core.Models.WeatherInfo">
+            <summary>
+            Represents current weather information for a city
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.City">
+            <summary>
+            Gets or sets the city name
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.Temperature">
+            <summary>
+            Gets or sets the current temperature in Celsius
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.Condition">
+            <summary>
+            Gets or sets the weather condition
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.Humidity">
+            <summary>
+            Gets or sets the humidity percentage
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.WindSpeed">
+            <summary>
+            Gets or sets the wind speed in km/h
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.Pressure">
+            <summary>
+            Gets or sets the atmospheric pressure in hPa
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherInfo.Timestamp">
+            <summary>
+            Gets or sets the timestamp when the data was recorded
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Core.Models.WeatherStats">
+            <summary>
+            Represents weather statistics
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherStats.TotalRequests">
+            <summary>
+            Gets or sets the total number of requests
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherStats.AverageTemperature">
+            <summary>
+            Gets or sets the average temperature
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherStats.MostRequestedCity">
+            <summary>
+            Gets or sets the most requested city
+            </summary>
+        </member>
+        <member name="P:WeatherApi.Core.Models.WeatherStats.LastUpdated">
+            <summary>
+            Gets or sets the last updated timestamp
+            </summary>
+        </member>
+        <member name="T:WeatherApi.Core.Services.IWeatherService">
+            <summary>
+            Interface for weather service operations
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Core.Services.IWeatherService.GetForecastAsync">
+            <summary>
+            Gets weather forecast for the next 5 days
+            </summary>
+            <returns>A collection of weather forecasts</returns>
+        </member>
+        <member name="M:WeatherApi.Core.Services.IWeatherService.GetCurrentWeatherAsync(System.String)">
+            <summary>
+            Gets current weather for a specific city
+            </summary>
+            <param name="city">The city name</param>
+            <returns>Current weather information</returns>
+        </member>
+        <member name="M:WeatherApi.Core.Services.IWeatherService.GetWeatherStatsAsync">
+            <summary>
+            Gets weather statistics
+            </summary>
+            <returns>Weather statistics</returns>
+        </member>
+        <member name="T:WeatherApi.Core.Services.WeatherService">
+            <summary>
+            Service for weather-related operations
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Core.Services.WeatherService.GetForecastAsync">
+            <summary>
+            Gets weather forecast for the next 5 days
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Core.Services.WeatherService.GetCurrentWeatherAsync(System.String)">
+            <summary>
+            Gets current weather for a specific city
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Core.Services.WeatherService.GetWeatherStatsAsync">
+            <summary>
+            Gets weather statistics
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WeatherApi</name>
+    </assembly>
+    <members>
+        <member name="T:WeatherApi.Controllers.WeatherController">
+            <summary>
+            Weather API controller for managing weather forecasts
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherController.GetForecast">
+            <summary>
+            Gets weather forecast for the next 5 days
+            </summary>
+            <returns>A list of weather forecasts</returns>
+            <response code="200">Returns the weather forecasts</response>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherController.GetCurrentWeather(System.String)">
+            <summary>
+            Gets current weather for a specific city
+            </summary>
+            <param name="city">The city name</param>
+            <returns>Current weather information</returns>
+            <response code="200">Returns the current weather</response>
+            <response code="404">City not found</response>
+        </member>
+        <member name="M:WeatherApi.Controllers.WeatherController.GetWeatherStats">
+            <summary>
+            Gets weather statistics
+            </summary>
+            <returns>Weather statistics information</returns>
+        </member>
+    </members>
+</doc>

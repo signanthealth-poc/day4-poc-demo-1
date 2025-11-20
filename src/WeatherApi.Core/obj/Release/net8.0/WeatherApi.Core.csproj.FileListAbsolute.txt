@@ -1,0 +1,14 @@
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\bin\Release\net8.0\WeatherApi.Core.deps.json
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\bin\Release\net8.0\WeatherApi.Core.dll
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\bin\Release\net8.0\WeatherApi.Core.pdb
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\bin\Release\net8.0\WeatherApi.Core.xml
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.csproj.AssemblyReference.cache
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.AssemblyInfoInputs.cache
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.AssemblyInfo.cs
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.csproj.CoreCompileInputs.cache
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.dll
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\refint\WeatherApi.Core.dll
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.xml
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\WeatherApi.Core.pdb
+D:\GITHUB\SIGNANT HEALTH\day4-poc-demo-1\src\WeatherApi.Core\obj\Release\net8.0\ref\WeatherApi.Core.dll

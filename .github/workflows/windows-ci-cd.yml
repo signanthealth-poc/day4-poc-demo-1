@@ -1,0 +1,112 @@
+name: Windows CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  SOLUTION_PATH: './WeatherApiDemo.sln'
+  BUILD_CONFIGURATION: 'Release'
+  ARTIFACT_NAME: 'weather-api-artifacts'
+
+jobs:
+  # Build and Test Matrix for Multiple Windows Versions
+  build-and-test:
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, windows-2022, windows-2019]
+        include:
+          - os: windows-latest
+            display-name: "Windows Latest"
+          - os: windows-2022
+            display-name: "Windows 2022"
+          - os: windows-2019
+            display-name: "Windows 2019"
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: Cache build outputs
+      uses: actions/cache@v3
+      with:
+        path: |
+          **/bin
+          **/obj
+        key: ${{ runner.os }}-build-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+
+    - name: Run MSTests
+      run: dotnet test tests/WeatherApi.MSTests/WeatherApi.MSTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=mstest-results.trx" --collect:"XPlat Code Coverage"
+
+    - name: Run NUnit Tests
+      run: dotnet test tests/WeatherApi.NUnitTests/WeatherApi.NUnitTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=nunit-results.trx" --collect:"XPlat Code Coverage"
+
+    - name: Run xUnit Tests
+      run: dotnet test tests/WeatherApi.XUnitTests/WeatherApi.XUnitTests.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --logger "trx;LogFileName=xunit-results.trx" --collect:"XPlat Code Coverage"
+
+    - name: Publish test results
+      uses: dorny/test-reporter@v1
+      if: success() || failure()
+      with:
+        name: Test Results (${{ matrix.display-name }})
+        path: '**/*.trx'
+        reporter: dotnet-trx
+
+    - name: Upload test coverage
+      uses: codecov/codecov-action@v3
+      if: matrix.os == 'windows-latest'
+      with:
+        file: '**/coverage.cobertura.xml'
+        flags: unittests
+        name: codecov-umbrella
+
+    - name: Publish artifacts
+      if: matrix.os == 'windows-latest' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+      run: dotnet publish src/WeatherApi/WeatherApi.csproj --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./publish
+
+    - name: Upload build artifacts
+      if: matrix.os == 'windows-latest' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ./publish
+        retention-days: 30

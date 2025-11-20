@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "9JiG/zbuEps=",
+  "success": true,
+  "projectFilePath": "D:\\GITHUB\\SIGNANT HEALTH\\day4-poc-demo-1\\src\\WeatherApi.Core\\WeatherApi.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lavanya N\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
+    "C:\\Users\\Lavanya N\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://infomagnus.pkgs.visualstudio.com/_packaging/Drayflex/nuget/v3/index.json.",
+      "projectPath": "D:\\GITHUB\\SIGNANT HEALTH\\day4-poc-demo-1\\src\\WeatherApi.Core\\WeatherApi.Core.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\GITHUB\\SIGNANT HEALTH\\day4-poc-demo-1\\src\\WeatherApi.Core\\WeatherApi.Core.csproj",
+      "targetGraphs": []
+    }
+  ]
+}

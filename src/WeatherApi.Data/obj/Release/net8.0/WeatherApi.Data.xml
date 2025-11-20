@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WeatherApi.Data</name>
+    </assembly>
+    <members>
+        <member name="T:WeatherApi.Data.Repositories.IWeatherRepository">
+            <summary>
+            Interface for weather data repository operations
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Data.Repositories.IWeatherRepository.LogWeatherRequestAsync(System.String)">
+            <summary>
+            Logs a weather request for statistics
+            </summary>
+            <param name="city">The city that was requested</param>
+        </member>
+        <member name="M:WeatherApi.Data.Repositories.IWeatherRepository.GetWeatherStatsAsync">
+            <summary>
+            Gets weather statistics from logged requests
+            </summary>
+            <returns>Weather statistics</returns>
+        </member>
+        <member name="T:WeatherApi.Data.Repositories.WeatherRepository">
+            <summary>
+            In-memory implementation of weather repository for demo purposes
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Data.Repositories.WeatherRepository.LogWeatherRequestAsync(System.String)">
+            <summary>
+            Logs a weather request for statistics
+            </summary>
+        </member>
+        <member name="M:WeatherApi.Data.Repositories.WeatherRepository.GetWeatherStatsAsync">
+            <summary>
+            Gets weather statistics from logged requests
+            </summary>
+        </member>
+    </members>
+</doc>
