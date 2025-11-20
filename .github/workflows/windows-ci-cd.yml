@@ -69,7 +69,7 @@ jobs:
 
     - name: Upload Artifacts
       if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
         path: ./publish/${{ matrix.environment }}
@@ -87,7 +87,7 @@ jobs:
     
     steps:
     - name: Download Artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ env.ARTIFACT_NAME }}-${{ matrix.environment }}
         path: ./deploy
