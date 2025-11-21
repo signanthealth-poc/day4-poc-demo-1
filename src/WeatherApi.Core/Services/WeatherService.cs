@@ -57,7 +57,7 @@ public class WeatherService : IWeatherService
     /// </summary>
     public async Task<WeatherInfo?> GetCurrentWeatherAsync(string city)
     {
-        _logger.LogInformation("Getting current weather for {City}", city);
+        _logger.LogInformation("Getting current weather for {City}", city.Replace("\r", "").Replace("\n", ""));
 
         if (string.IsNullOrWhiteSpace(city))
         {
