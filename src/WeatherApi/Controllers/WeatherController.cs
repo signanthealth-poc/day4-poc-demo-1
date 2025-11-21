@@ -56,7 +56,7 @@ public class WeatherController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<ActionResult<WeatherInfo>> GetCurrentWeather(string city)
     {
-        _logger.LogInformation("Getting current weather for city: {City}", city);
+        _logger.LogInformation("Getting current weather for city: {City}", city.Replace("\r", "").Replace("\n", ""));
         
         if (string.IsNullOrWhiteSpace(city))
         {
